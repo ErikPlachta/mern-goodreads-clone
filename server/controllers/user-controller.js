@@ -13,7 +13,7 @@ module.exports = {
     if (!foundUser) {
       return res.status(400).json({ message: 'Cannot find a user with this id!' });
     }
-
+    console.log(foundUser)
     res.json(foundUser);
   },
   // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
@@ -46,6 +46,7 @@ module.exports = {
   // user comes from `req.user` created in the auth middleware function
   async saveBook({ user, body }, res) {
     console.log(user);
+    console.log(body);
     try {
       const updatedUser = await User.findOneAndUpdate(
         { _id: user._id },

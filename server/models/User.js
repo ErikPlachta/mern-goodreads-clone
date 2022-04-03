@@ -32,7 +32,6 @@ const userSchema = new Schema(
   }
 );
 
-
 //TODO:: 04/03/2022 #EP || Add encryption to passwords
 //TODO:: 04/03/2022 #EP || Add logged in date/time
 //TODO:: 04/03/2022 #EP || Add logged out date/time

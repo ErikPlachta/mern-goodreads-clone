@@ -9,7 +9,7 @@ MERN stack concept app built around the Goodreads app idea.
 ## Under Development
 
 - Google Books API
-- Custom RESTful API built on Apollo Server / GraphQL API
+- Custom API built with Apollo Server GraphQL
 
 ## Resources for Developer
 
