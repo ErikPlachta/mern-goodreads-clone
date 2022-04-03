@@ -6,28 +6,35 @@ import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 const LoginForm = () => {
+  //-- grab current state value from form
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
-  const [validated] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [validated] = useState(false); //?
+  const [showAlert, setShowAlert] = useState(false); //?
 
+  //-- When user inputs data event, listen for change
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
 
+  //-- when user tries to login
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
+
+    //-- STOP if doesn't form doesn't meet requirements
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
 
+    //-- otherwise try to login
     try {
       const response = await loginUser(userFormData);
 
+      //-- if ails to login, 
       if (!response.ok) {
         throw new Error('something went wrong!');
       }
@@ -51,7 +58,8 @@ const LoginForm = () => {
     <>
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
         <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
-          Something went wrong with your login credentials!
+          Invalid credentials.<br/>
+          Please verify your account details and try again.
         </Alert>
         <Form.Group>
           <Form.Label htmlFor='email'>Email</Form.Label>
