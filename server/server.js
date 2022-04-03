@@ -3,8 +3,8 @@ const {ApolloServer} = require('apollo-server-express');
 const path = require('path');
 
 //TODO:: 04/03/2022 #EP || Onboard Apollo server
-// const {typeDefs, resolvers} = require('./schemas');
-// const {authMiddleware} = require('./utils/auth');
+const {typeDefs, resolvers} = require('./schemas');
+const {authMiddleware} = require('./utils/auth');
 
 const db = require('./config/connection');
 //TODO:: 04/03/2022 #EP || Comment out routes once GraphQL boarded

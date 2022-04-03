@@ -26,35 +26,67 @@ const resolvers = {
     },
 
     Mutation: {
-        addUser: async (parent, args) => {
+        createUser: async (parent, args) => {
             const user = await User.create(args);
             const token = signToken(user);
       
             return { token, user };
         },
-        login: async (parent, { email, password }) => {
-            const user = await User.findOne({ email });
+        
+        login: async ({ body }, res) => {
+            const user = await User
+                .findOne({
+                    $or: [
+                        { username: body.username },
+                        { email: body.email }
+                    ]
+                });
       
             if (!user) {
-                throw new AuthenticationError('Incorrect credentials');
+                throw new AuthenticationError('Invalid credentials');
             }
       
             const correctPw = await user.isCorrectPassword(password);
       
             if (!correctPw) {
-                throw new AuthenticationError('Incorrect credentials');
+                throw new AuthenticationError('Invalid credentials');
             }
       
             const token = signToken(user);
             return { token, user };
         },
-        saveBook: async (parent, bookBody ) => {
-
+        
+        saveBook: async (parent, body, context ) => {
+            //-- if logged in
+            if (context.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $addToSet: { savedBooks: body } },
+                    { new: true, runValidators: true }
+                ).populate('savedBooks');
+                //-- finished, exit
+                return updatedUser;
+            }
+            //-- not logged in, exit
+            throw new AuthenticationError('ERROR: Auth Required');
         },
-        deleteBook: async ( parent, {bookId} ) => {
-
-        }
-    }
+        
+        //-- Remove association of book from user specific array savedBooks
+        deleteBook: async ( parent, { bookId }, context ) => {
+            //-- if logged in
+            if (context.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $pull: { savedBooks: { bookId: params.bookId } } },
+                    { new: true }
+                ).populate('savedBooks');
+                //-- finished, exit
+                return updatedUser;
+            }
+            //-- not logged in, exit
+            throw new AuthenticationError('ERROR: Auth Required');
+        },
+    },
 };
 
 module.exports = resolvers;
