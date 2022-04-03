@@ -8,6 +8,9 @@ MERN stack concept app built around the Goodreads app idea.
 
 ## Under Development
 
+- Google Books API
+- Custom RESTful API built on Apollo Server / GraphQL API
+
 ## Resources for Developer
 
 - https://erikplachta-merngoodreadsclone.herokuapp.com/

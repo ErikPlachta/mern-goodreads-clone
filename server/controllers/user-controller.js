@@ -1,6 +1,6 @@
-// import user model
+//-- Used to seed and verify API requests
 const { User } = require('../models');
-// import sign token function from auth
+//-- JWT Token used for user auth
 const { signToken } = require('../utils/auth');
 
 module.exports = {

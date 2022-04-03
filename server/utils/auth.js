@@ -1,11 +1,14 @@
 const jwt = require('jsonwebtoken');
 
 // set token secret and expiration date
+//TODO:: 04/03/2022 #EP || Add as env variable
 const secret = 'mysecretsshhhhh';
+// const secret = proces.env.JWT_SECRET;
 const expiration = '2h';
 
 module.exports = {
-  // function for our authenticated routes
+  //TODO:: 04/03/2022 #EP || Update this for GraphQL
+  // function used by authenticated routes
   authMiddleware: function (req, res, next) {
     // allows token to be sent via  req.query or headers
     let token = req.query.token || req.headers.authorization;
