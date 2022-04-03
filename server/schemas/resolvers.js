@@ -26,19 +26,20 @@ const resolvers = {
     },
 
     Mutation: {
-        createUser: async (parent, args) => {
-            const user = await User.create(args);
+        //-- takes username, email, and password to create ne user
+        createUser: async (parent, params) => {
+            const user = await User.create(params);
             const token = signToken(user);
-      
+            
             return { token, user };
         },
-        
-        login: async ({ body }, res) => {
+        //-- user can login with username or email and password
+        login: async (parent, params, res) => {
             const user = await User
                 .findOne({
                     $or: [
-                        { username: body.username },
-                        { email: body.email }
+                        { username: params.username },
+                        { email: params.email }
                     ]
                 });
       
@@ -46,7 +47,7 @@ const resolvers = {
                 throw new AuthenticationError('Invalid credentials');
             }
       
-            const correctPw = await user.isCorrectPassword(password);
+            const correctPw = await user.isCorrectPassword(params.password);
       
             if (!correctPw) {
                 throw new AuthenticationError('Invalid credentials');
@@ -56,12 +57,12 @@ const resolvers = {
             return { token, user };
         },
         
-        saveBook: async (parent, body, context ) => {
+        saveBook: async (parent, params, context ) => {
             //-- if logged in
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addToSet: { savedBooks: body } },
+                    { $addToSet: { savedBooks: params } },
                     { new: true, runValidators: true }
                 ).populate('savedBooks');
                 //-- finished, exit
