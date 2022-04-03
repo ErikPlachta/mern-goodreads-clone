@@ -5,23 +5,27 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
     Query: {
         //-- request thine-self if you  must!
-        //TODO:: 04/03/2022 #EP || Add this to be proper
         me: async (parent, args, context) => {
             if(context.user){
-                const userData = await User.findOne({ _id: context.user._id })
-                    .select('__v -password') //-- ??
-                    .populate('savedBooks');
+                const foundUser = await User.findOne({
+                    $or: [
+                        { _id: user ? user._id : params.id },
+                        { username: params.username }
+                    ],
+                })
+                    .select('__v -password') //-- don't return password
+                    .populate('savedBooks'); //-- populate save book array
                 //-- return the results
-                return userData;
+                return foundUser;
             }
             throw new AuthenticationError('ERROR: Auth Required');
         },
         //-- get a single user by either their id or their username
         getSingleUser: async (parent, { _id, username }) => {
-            //TODO:: 04/03/2022 #EP || Add or by ID
+            
             return User.findOne({ username })
-                .select('-__v -password')
-                .populate('savedBooks');
+                .select('-__v -password') //-- exclude passwords
+                .populate('savedBooks');  //-- populate save book array
         },
     },
 
