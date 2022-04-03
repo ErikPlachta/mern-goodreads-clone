@@ -1,7 +1,7 @@
 {
   "name": "mern-goodreads-clone-app",
   "version": "0.1.0",
-  "description": "MERN stack concept app built around the Goodreads app idea.",
+  "description": "MERN stack concept app built around the GoodReads app idea. Make account, save books you like.",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
