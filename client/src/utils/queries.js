@@ -29,7 +29,7 @@ export const GET_ME = gql`
       savedBooks {
         _id
         bookId
-        authors
+        authors 
         description
         title
         image
