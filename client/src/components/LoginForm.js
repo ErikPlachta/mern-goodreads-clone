@@ -1,11 +1,18 @@
 // see SignupForm.js for comments
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-
 import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 
+//-- APOLLO!
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../utils/mutations';
+
 const LoginForm = () => {
+  //-- Apollo state mgmt
+  // const [formState, setFormState] = useState({ email: '', password: '' });
+  // const [login, { error }] = useMutation(LOGIN_USER);
+  
   //-- grab current state value from form
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated] = useState(false); //?
@@ -32,11 +39,12 @@ const LoginForm = () => {
 
     //-- otherwise try to login
     try {
+      
       const response = await loginUser(userFormData);
 
       //-- if ails to login, 
       if (!response.ok) {
-        throw new Error('something went wrong!');
+        throw new Error('ERROR: Check with Admin or try again later.');
       }
 
       const { token, user } = await response.json();
