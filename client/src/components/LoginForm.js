@@ -9,11 +9,9 @@ import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
 
 const LoginForm = () => {
-  //-- Apollo state mgmt
-  // const [formState, setFormState] = useState({ email: '', password: '' });
-  // const [login, { error }] = useMutation(LOGIN_USER);
-  
-  //-- grab current state value from form
+  //-- Apollo database call
+  const [login, { error }] = useMutation(LOGIN_USER);
+  //-- username and pass in login form
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated] = useState(false); //?
   const [showAlert, setShowAlert] = useState(false); //?
@@ -38,21 +36,36 @@ const LoginForm = () => {
     }
 
     //-- otherwise try to login
-    try {
+    // try {
       
-      const response = await loginUser(userFormData);
+    //   //-- RESTful API Call
+    //   const response = await loginUser(userFormData);
+      
+    //   //-- if fails to login, throw error
+    //   if (!response.ok) {
+    //     throw new Error('ERROR: Check with Admin or try again later.');
+    //   }
+    //   //-- otherwise return user and token 
+    //   const { token, user } = await response.json();
+    //   //-- then authorize user
+    //   Auth.login(token);
+    //   // console.log(user);
+    // } catch (err) {
+    //   console.error(err);
+    //   setShowAlert(true);
+    // }
 
-      //-- if ails to login, 
-      if (!response.ok) {
-        throw new Error('ERROR: Check with Admin or try again later.');
-      }
+    //-- GraphQL Call
+    try {
+      const { data } = await login({
+        variables: { ...userFormData },
+      });
 
-      const { token, user } = await response.json();
-      console.log(user);
-      Auth.login(token);
-    } catch (err) {
-      console.error(err);
-      setShowAlert(true);
+      Auth.login(data.login.token);
+      
+      //--or fail!
+    }catch (e) {
+      console.error(e);
     }
 
     setUserFormData({
@@ -66,7 +79,7 @@ const LoginForm = () => {
     <>
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
         <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
-          Invalid credentials.<br/>
+          Invalid credentials or account does not.<br/>
           Please verify your account details and try again.
         </Alert>
         <Form.Group>
