@@ -16,7 +16,6 @@ export const GET_USER = gql`
         link
       }
     }
-    }
   }
 `;
 
@@ -25,7 +24,7 @@ export const GET_ME = gql`
     me {
       _id
       username
-      bookCount
+      email
       savedBooks {
         _id
         bookId
@@ -34,7 +33,7 @@ export const GET_ME = gql`
         title
         image
         link
-      }
+      }  
     }
   }
 `;

@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
+import { Redirect, useParams } from 'react-router-dom';
 
 import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
+//-- APOLLO / Graphql
+import { useMutation, useQuery } from '@apollo/client';
+import { GET_ME, GET_USER } from '../utils/queries';
+// import { DELETE_BOOK } from '../utils/mutations';
+
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
+  // const [deleteBook, { deleteError }] = useMutation(DELETE_BOOK);
+  const { username: userParam } = useParams();
+  const { loading, data } = useQuery(userParam ? GET_USER : GET_ME, {
+    variables: { username: userParam },
+  });
 
   // use this to determine if `useEffect()` hook needs to run again
   const userDataLength = Object.keys(userData).length;
