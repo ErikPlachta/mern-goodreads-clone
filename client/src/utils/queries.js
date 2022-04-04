@@ -5,18 +5,17 @@ export const GET_USER = gql`
     user(username: $username) {
       _id
       username
-      email
-      friendCount
-      friends {
+      bookCount
+      savedBooks {
         _id
-        username
+        bookId
+        authors
+        description
+        title
+        image
+        link
       }
-      thoughts {
-        _id
-        thoughtText
-        createdAt
-        reactionCount
-      }
+    }
     }
   }
 `;
@@ -26,23 +25,15 @@ export const GET_ME = gql`
     me {
       _id
       username
-      email
-      friendCount
-      thoughts {
+      bookCount
+      savedBooks {
         _id
-        thoughtText
-        createdAt
-        reactionCount
-        reactions {
-          _id
-          createdAt
-          reactionBody
-          username
-        }
-      }
-      friends {
-        _id
-        username
+        bookId
+        authors
+        description
+        title
+        image
+        link
       }
     }
   }

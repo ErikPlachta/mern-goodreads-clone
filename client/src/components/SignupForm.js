@@ -38,10 +38,11 @@ const SignupForm = () => {
         variables: { ...userFormData },
       });
 
+      //-- grab auth values from userToken var
       Auth.login(data.createUser.token);
 
     } catch (err) {
-      console.log(err)
+      // console.log(err)
       setShowAlert(true);
     }
 
